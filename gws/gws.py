@@ -32,16 +32,17 @@ if '__main__' == __name__:
     pages = ['BulgeHd', 'Lickourdisplay', 'trasherbangkok', 'haruehun.airry', 'Toodsdiary', 'NeeNongNa', 'overtheeyebrow', 'cutegaystory', 'gaythaigointer', 'koorakgay', 'iamgaytherabbit', 'SingleGay.th', 'GthaiMovie', 'gaybottom']
 
     for page in pages:
+        print "Page @%s" % page
         p_url = format_url(page_id = page, query = '?fields=feed{message,link,comments}') 
         page_request = urllib2.urlopen(p_url)
         page_content_text = page_request.read()
         page_content = json.loads(page_content_text)
 
         for message in page_content['feed']['data']:
-            with open('message.txt', 'aw') as m:
-                if 'message' in message:
-                    m.write("%s\n" % message['message'])
-
+            if 'comments' in message:
+                with open('message.txt', 'aw') as m:
+                    for msg in message['comments']['data']:
+                        m.write("%s\n" % msg['message'])
                 m.close()
 
         time.sleep(30)
