@@ -29,16 +29,17 @@ def get_page_content(page_url, is_first_page=True):
     page_content_text = page_request.read()
     page_content = json.loads(page_content_text)
 
-    return page_content['feed']['data'] if is_first_page else page['data']
+    return page_content['feed'] if is_first_page else page
 
 
 def get_comments(comments, datastore):
 
     for comment in comments:
-        datastore.write("%s\n" % comment)
+        if 'message' in comment:
+            datastore.write("%s\n" % comment['message'])
 
-        if comment['comment_count'] > 0:
-            get_comments(comment['comments']['data'], datastore)
+            if 'comment_count' in comment and comment['comment_count'] > 0:
+                get_comments(comment['comments']['data'], datastore)
 
 
 
@@ -56,7 +57,7 @@ if '__main__' == __name__:
 
         for i in range(10):
 
-            for message in page_content:
+            for message in page_content['data']:
 
                 if 'comments' in message:
 
