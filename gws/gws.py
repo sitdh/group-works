@@ -32,7 +32,7 @@ def get_page_content(page_url, is_first_page=True):
     return page_content['feed']['data'] if is_first_page else page['data']
 
 
-def get_comemnts(comments, datastore):
+def get_comments(comments, datastore):
 
     for comment in comments:
         datastore.write("%s\n" % comment)
@@ -52,22 +52,21 @@ if '__main__' == __name__:
         first_page = True
 
         page_url = format_url(page_id = page, query = '?fields=feed{comments{message,comment_count,comments{message}}}') 
+        page_content = get_page_content(page_url, first_page)
 
         for i in range(10):
-
-            page_content = get_page_content(page_url, first_page)
-
-            first_page = False
 
             for message in page_content:
 
                 if 'comments' in message:
 
                     with open('%s-comments.txt' % page, 'aw') as message_content:
-                        get_comment(message['comments']['data'], message_content)
+                        get_comments(message['comments']['data'], message_content)
                         message_content.close()
 
             page_url = page_content['paging']['next']
+            first_page = False
+
             time.sleep(30)
 
         time.sleep(30)
