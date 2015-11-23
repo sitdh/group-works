@@ -69,7 +69,11 @@ if '__main__' == __name__:
 
             time.sleep(30)
 
-            page_url = page_content['paging']['next']
+            if 'paging' in page_content:
+                page_url = page_content['paging']['next']
+            else:
+                break
+
             first_page = False
 
 
