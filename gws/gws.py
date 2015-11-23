@@ -29,7 +29,7 @@ def get_page_content(page_url, is_first_page=True):
     page_content_text = page_request.read()
     page_content = json.loads(page_content_text)
 
-    return page_content['feed'] if is_first_page else page
+    return page_content['feed'] if is_first_page else page_content
 
 
 def get_comments(comments, datastore):
@@ -46,14 +46,12 @@ def get_comments(comments, datastore):
 if '__main__' == __name__:
 
     pages = ['BulgeHd', 'Lickourdisplay', 'trasherbangkok', 'haruehun.airry', 'Toodsdiary', 'NeeNongNa', 'overtheeyebrow', 'cutegaystory', 'gaythaigointer', 'koorakgay', 'iamgaytherabbit', 'SingleGay.th', 'GthaiMovie', 'gaybottom']
-    # pages = ['NeeNongNa', 'overtheeyebrow', 'cutegaystory', 'gaythaigointer', 'koorakgay', 'iamgaytherabbit', 'SingleGay.th', 'GthaiMovie', 'gaybottom']
 
     for page in pages:
+
         print "Page @%s" % page
-
         first_page = True
-
-        page_url = format_url(page_id = page, query = '?fields=feed{comments{message,comment_count,comments{message}}}') 
+        page_url = format_url(page_id=page,query='?fields=feed{comments{message,comment_count,comments{message}}}') 
 
         for i in range(10):
 
@@ -71,7 +69,7 @@ if '__main__' == __name__:
 
             time.sleep(30)
 
-            page_url = page_content['paging']['previous']
+            page_url = page_content['paging']['next']
             first_page = False
 
 
