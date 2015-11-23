@@ -38,7 +38,7 @@ def get_comments(comments, datastore):
         if 'message' in comment:
             datastore.write("%s\n" % comment['message'])
 
-            if 'comment_count' in comment and comment['comment_count'] > 0:
+            if 'comment_count' in comment and comment['comment_count'] > 0 and 'comment' in comment:
                 get_comments(comment['comments']['data'], datastore)
 
 
@@ -46,6 +46,7 @@ def get_comments(comments, datastore):
 if '__main__' == __name__:
 
     pages = ['BulgeHd', 'Lickourdisplay', 'trasherbangkok', 'haruehun.airry', 'Toodsdiary', 'NeeNongNa', 'overtheeyebrow', 'cutegaystory', 'gaythaigointer', 'koorakgay', 'iamgaytherabbit', 'SingleGay.th', 'GthaiMovie', 'gaybottom']
+    # pages = ['NeeNongNa', 'overtheeyebrow', 'cutegaystory', 'gaythaigointer', 'koorakgay', 'iamgaytherabbit', 'SingleGay.th', 'GthaiMovie', 'gaybottom']
 
     for page in pages:
         print "Page @%s" % page
@@ -53,9 +54,12 @@ if '__main__' == __name__:
         first_page = True
 
         page_url = format_url(page_id = page, query = '?fields=feed{comments{message,comment_count,comments{message}}}') 
-        page_content = get_page_content(page_url, first_page)
 
         for i in range(10):
+
+            print "\tStart at page number %i" % (i+1)
+
+            page_content = get_page_content(page_url, first_page)
 
             for message in page_content['data']:
 
@@ -65,10 +69,11 @@ if '__main__' == __name__:
                         get_comments(message['comments']['data'], message_content)
                         message_content.close()
 
-            page_url = page_content['paging']['next']
+            time.sleep(30)
+
+            page_url = page_content['paging']['previous']
             first_page = False
 
-            time.sleep(30)
 
         time.sleep(30)
          
