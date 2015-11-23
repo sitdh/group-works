@@ -25,7 +25,7 @@ def format_url(page_id = "", query = ""):
     return "%s%s%s&access_token=%s" % (graph_url, page_id, query, credential['access_token'])
 
 def get_page_content(page_url, is_first_page=True):
-    page_request = urllib2.urlopen(age_url)
+    page_request = urllib2.urlopen(page_url)
     page_content_text = page_request.read()
     page_content = json.loads(page_content_text)
 
