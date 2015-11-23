@@ -31,14 +31,16 @@ def get_page_content(page_url, is_first_page=True):
 
     return page_content['feed']['data'] if is_first_page else page['data']
 
+
 def get_comemnts(comments, datastore):
 
     for comment in comments:
-
         datastore.write("%s\n" % comment)
 
         if comment['comment_count'] > 0:
             get_comments(comment['comments']['data'], datastore)
+
+
 
 if '__main__' == __name__:
 
@@ -47,11 +49,11 @@ if '__main__' == __name__:
     for page in pages:
         print "Page @%s" % page
 
-        page_url = format_url(page_id = page, query = '?fields=feed{comments{message,comment_count,comments{message}}}') 
-
         first_page = True
 
-        for i in [1..10]:
+        page_url = format_url(page_id = page, query = '?fields=feed{comments{message,comment_count,comments{message}}}') 
+
+        for i in range(10):
 
             page_content = get_page_content(page_url, first_page)
 
